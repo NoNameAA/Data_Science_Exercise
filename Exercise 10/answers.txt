@@ -1,0 +1,17 @@
+1.
+(1). The reddit-0 data set and effectively no work: 
+real	0m8.132s
+
+(2). No schema specified and not caching(reddit-2):
+real	0m16.274s
+
+(3). With a schema but not caching(reddit-2):
+real	0m12.713s
+
+(4). With both a schema and caching the twice-used DataFrame(reddit-2):
+real	0m10.759s
+
+
+2. The most of time is used for reading the files.
+
+3. I used .cache() between filter the data by some conditions and groupBy('datetime').max('view').
