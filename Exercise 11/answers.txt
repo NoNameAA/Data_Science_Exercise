@@ -1,0 +1,19 @@
+1.
+The dataframe of 'comments' and 'joined_comments' used .cache(), because there are more than one dataframe use the two dataframe. If I draw a Spark DAG, the positions of the two .cache() function are used before the DAG begins to branch out.
+
+I used .cache() after serialization operations for a dataframe, and before more than one dataframes need to use this cached dataframe to do some parallel operation.
+
+If I did not use .cache() function, the parallel dataframe functions which use the same dataframe will cause repeating duplicate serialization operations on this public dataframe.
+
+
+2.
+With broadcast with 8 executors:
+real	0m39.219s
+
+Without broadcast and prevent automatic broadcasting:
+real	0m49.679s
+
+According the running time about reddit_relative program above, the broadcast improves the performance of .join() singnificantly.
+
+Because the spark framework sends a copy of the small table to every executor, so each executor can do parallel .join(), a big table join a small table becomes some small tables join a small table task. So optimize the .join() function in Spark.
+
